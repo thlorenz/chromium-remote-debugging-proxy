@@ -1,20 +1,41 @@
 # chromium-remote-debugging-proxy
 
-A proxy that sits in between a chromium devtools frontend and the remote backend and logs requests and websocket messages initiated by the frontend.
+A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests and websocket
+messages initiated by the frontend.
 
-```js
-// TODO
+![screenshot](https://raw.githubusercontent.com/thlorenz/chromium-remote-debugging-proxy/master/assets/screenshot.png)
+
+## Usage 
+
+### Start Proxy
+
+```
+crdp
 ```
 
-## Status
+### Start Chromium with remote debugging enabled
 
-Nix, Nada, Nichevo, Nothing --> go away!
+```
+./Chromium.app/Contents/MacOS/Chromium --remote-debugging-port=9222 --no-sandbox
+```
+
+### Open DevTools in another Browser
+
+Make sure it points to the Proxy Port (by default `REMOTE_PORT -1`).
+
+[localhost:9221](http://localhost:9221/)
+
 ## Installation
 
     npm install chromium-remote-debugging-proxy
 
-## API
+## Configuration
 
+You can override both ports used by setting the below environment variables:
+
+- `REMOTE_PORT`: overrides port at which remote Chromium is listening, same as `--remote-debugging-port` (default:
+  `9222`)
+- `PORT`: overrides proxy port (default: `REMOTE_PORT - 1`)
 
 ## License
 
