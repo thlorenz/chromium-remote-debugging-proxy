@@ -82,13 +82,13 @@ server.on('upgrade', function onupgrade(req, socket, head) {
   })
 
   socket.on('data', function ondata(data) {
-    if (socket.proxySocket) {
-      socket.proxySocket.on('data', function ondata(data) {
-        retHybi.parse(data)
-      })
-     socket.proxySocket = undefined;
-    }
     hybi.parse(data)
+  })
+
+  socket.on('proxySocket', function (proxySocket) {
+    proxySocket.on('data', function ondata(data) {
+      retHybi.parse(data)
+    })
   })
 
   proxy.ws(req, socket, head);  
