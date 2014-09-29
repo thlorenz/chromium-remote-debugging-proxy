@@ -1,7 +1,7 @@
 # chromium-remote-debugging-proxy
 
-A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests and websocket
-messages initiated by the frontend.
+A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests, responses and websocket
+messages that are exchanged.
 
 ![screenshot](https://raw.githubusercontent.com/thlorenz/chromium-remote-debugging-proxy/master/assets/screenshot.png)
 

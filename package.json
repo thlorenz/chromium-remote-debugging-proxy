@@ -1,7 +1,7 @@
 {
   "name": "chromium-remote-debugging-proxy",
   "version": "0.1.0",
-  "description": "A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests and websocket messages initiated by the frontend.",
+  "description": "A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests, responses and websocket messages that are exchanged.",
   "main": "index.js",
   "bin": {
     "crdp": "./index.js"
@@ -13,8 +13,9 @@
   },
   "homepage": "https://github.com/thlorenz/chromium-remote-debugging-proxy",
   "dependencies": {
-    "http-proxy": "~1.4.3",
+    "http-proxy": "git://github.com/thlorenz/node-http-proxy#expose-proxy-socket",
     "npmlog": "~0.1.1",
+    "traverse": "~0.6.6",
     "websocket-driver": "~0.3.5"
   },
   "devDependencies": {},
