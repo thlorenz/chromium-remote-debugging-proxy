@@ -22,7 +22,7 @@ function inspect(obj, depth) {
 function ensureLength(obj) {
   // prevent huge things like sourcemaps to print in their entirety
   traverse(obj).forEach(function (x) {
-    if (x.length && x.length > 500)
+    if (x && x.length && x.length > 500)
       this.update(x.slice(0, 500) + ' ... ');
   })
 }
