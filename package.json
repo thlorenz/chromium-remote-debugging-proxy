@@ -1,6 +1,6 @@
 {
   "name": "chromium-remote-debugging-proxy",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests, responses and websocket messages that are exchanged.",
   "main": "index.js",
   "bin": {
