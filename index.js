@@ -32,12 +32,35 @@ var proxy = httpProxy.createProxyServer({
   , ws: true  
 })
 
+// responses coming from debugged target
 proxy.on('proxyRes', function (proxyRes, req, res) {
   log.http(req.method, ' <=', inspect(proxyRes.headers));
 })
 
+// messages coming across websocket from debugged target
+retHybi.on('message', function onhybiRetMessage(msg) {
+  var obj;
+  if (msg.data !== null) {
+    try {
+      obj = JSON.parse(msg.data);
+    } catch (err) {
+      return log.info('ws', '<=', inspect(msg.data));
+    }
+    ensureLength(obj)
+
+    log.info('ws', '<=', inspect(obj));
+  }
+})
+
+proxy.on('proxySocket', function (proxySocket) {
+  proxySocket.on('data', function ondata(data) {
+    retHybi.parse(data)
+  })
+})
+
 var server = http.createServer();
 
+// requests sent to debugged target
 server.on('request', function onconnection(req, res) {
   log.http(req.method, ' =>', req.url);
   proxy.web(req, res, { target: HOST + ':' + REMOTE_PORT });
@@ -47,6 +70,7 @@ server.on('request', function onconnection(req, res) {
   })
 })
 
+// messages sent to debugged target across websocket
 server.on('upgrade', function onupgrade(req, socket, head) {
   log.info('ws', ' =>', 'Upgrade: %s', req.url);
   var prevId = -1;
@@ -67,28 +91,8 @@ server.on('upgrade', function onupgrade(req, socket, head) {
     }
   })
 
-  retHybi.on('message', function onhybiRetMessage(msg) {
-    var obj;
-    if (msg.data !== null) {
-      try {
-        obj = JSON.parse(msg.data);
-      } catch (err) {
-        return log.info('ws', '<=', inspect(msg.data));
-      }
-      ensureLength(obj)
-
-      log.info('ws', '<=', inspect(obj));
-    }
-  })
-
   socket.on('data', function ondata(data) {
     hybi.parse(data)
-  })
-
-  socket.on('proxySocket', function (proxySocket) {
-    proxySocket.on('data', function ondata(data) {
-      retHybi.parse(data)
-    })
   })
 
   proxy.ws(req, socket, head);  
