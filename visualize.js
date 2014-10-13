@@ -4,7 +4,6 @@
 
 var fs = require('fs')
   , path = require('path')
-  , format = require('json-human').format
   , htmlTmpl = fs.readFileSync(path.join(__dirname, 'visualize.html'), 'utf8')
   , log = require('npmlog')
 
