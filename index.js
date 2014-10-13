@@ -9,21 +9,50 @@ var http      = require('http')
   , retHybi   = new Hybi()
   , traverse  = require('traverse')
   , log       = require('npmlog')
+  , minimist  = require('minimist')
+  , path      = require('path')
+  , fs        = require('fs')
 
-var REMOTE_PORT = process.env.REMOTE_PORT || 9222
-  , PORT        = process.env.PORT        || (REMOTE_PORT - 1)
+function usage() {
+  var usageFile = path.join(__dirname, 'usage.txt');
+  fs.createReadStream(usageFile).pipe(process.stdout);
+  return;
+}
+
+var argv = minimist(
+    process.argv.slice(2)
+  , { boolean: [ 'h', 'help' ]
+    , string: [ 'loglevel', 'l', 'port', 'p', 'remote', 'r', 'outfile', 'o' ]
+    }
+)
+
+var REMOTE_PORT = argv.remote   || argv.r || 9222
+  , PORT        = argv.port     || argv.p || (REMOTE_PORT - 1)
+  , OUTFILE     = argv.outfile  || argv.o 
   , HOST        = 'http://127.0.0.1'
   , WS_HOST     = 'ws://127.0.0.1'
 
+if (argv.h || argv.help) return usage();
+
+if (OUTFILE) OUTFILE = path.resolve(process.cwd(), OUTFILE);
+
 function inspect(obj, depth) {
   return require('util').inspect(obj, false, depth || 5, true);
+}
+
+function writeMessage(msg, direction) {
+  msg.direction = direction;
+  var json = JSON.stringify(msg, null, 2);
+  fs.appendFile(OUTFILE, json + ',\n', function (err) {
+    if (err) log.error('outfile', 'Encountered an error while writing message to ' + OUTFILE, err);  
+  })
 }
 
 function ensureLength(obj) {
   // prevent huge things like sourcemaps to print in their entirety
   traverse(obj).forEach(function (x) {
     if (x && x.length && x.length > 500)
-      this.update(x.slice(0, 500) + ' ... ');
+      this.update(x.slice(0, 500) + '... (Length: ' + x.length + ')');
   })
 }
 
@@ -46,6 +75,8 @@ retHybi.on('message', function onhybiRetMessage(msg) {
     } catch (err) {
       return log.info('ws', '<=', inspect(msg.data));
     }
+    // write before we trim length of some strings
+    if (OUTFILE) writeMessage(obj, '<=');
     ensureLength(obj)
 
     log.info('ws', '<=', inspect(obj));
@@ -66,7 +97,7 @@ server.on('request', function onconnection(req, res) {
   proxy.web(req, res, { target: HOST + ':' + REMOTE_PORT });
   proxy.on('error', function onproxyError(err) {
     log.error('proxy', err);
-    if (err.code === 'ECONNREFUSED') log.error('proxy', 'Make sure you have a Chromium instance with remote debugging enabled running.');
+    if (err.code === 'ECONNREFUSED') return log.error('proxy', 'Make sure you have a Chromium instance with remote debugging enabled running.');
   })
 })
 
@@ -84,6 +115,8 @@ server.on('upgrade', function onupgrade(req, socket, head) {
         return log.info('ws', '=>', inspect(msg.data));
       }
       if (prevId !== obj.id) { 
+        // write before we trim length of some strings
+        if (OUTFILE) writeMessage(obj, '=>');
         ensureLength(obj)
         log.info('ws', '=>', inspect(obj));
       }

@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/thlorenz/chromium-remote-debugging-proxy",
   "dependencies": {
-    "http-proxy": "~1.5.0",
+    "http-proxy": "~1.5.3",
     "npmlog": "~0.1.1",
     "traverse": "~0.6.6",
     "websocket-driver": "~0.3.5"
