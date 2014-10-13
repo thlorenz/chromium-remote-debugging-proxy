@@ -27,7 +27,7 @@ var src        = fs.readFileSync(file, 'utf8')
   , obj        = JSON.parse(json)
   , sorted     = obj.sort(byIdThenDirection)
   , sortedJSON = JSON.stringify(sorted)
-  , outfile    = file + '.html'
+  , outfile    = file.slice(0, -path.extname(file).length) + '.html'
 
 var html = htmlTmpl
   .replace(/{{ROOT}}/g, __dirname)
@@ -36,4 +36,4 @@ var html = htmlTmpl
 
 fs.writeFileSync(outfile, html, 'utf8')
 
-log.info('crdp-visualize', 'Successfully wrote html visualiztion to "./%s"', path.relative(process.cwd(), outfile))
+log.info('crdp-visualize', 'Successfully wrote html visualization to "./%s"', path.relative(process.cwd(), outfile))

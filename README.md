@@ -67,7 +67,7 @@ After generating a JSON message file via the crdp `--outfile` option do the foll
 
 ```
 crdp-visualize ./path-to-file.json
-open ./path-to-file.json.html
+open ./path-to-file.html
 ```
 
 [sample html](http://thlorenz.github.io/chromium-remote-debugging-proxy/)
