@@ -58,6 +58,18 @@ EXAMPLES:
     crdp --remote 9222 -outfile messages.json
 ```
 
+## Visualizer Usage
+
+In order to better understand the messages the `crdp-visualize` is included. It will sort messages and thus group
+outgoing ones right next to the incoming message sent in response.
+
+After generating a JSON message file via the crdp `--outfile` option do the following:
+
+```
+crdp-visualize ./path-to-file.json
+open ./path-to-file.json.html
+```
+
 ## License
 
 MIT

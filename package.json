@@ -4,7 +4,8 @@
   "description": "A proxy that sits in between a chromium devtools frontend and the remote chromium being debugged and logs requests, responses and websocket messages that are exchanged.",
   "main": "index.js",
   "bin": {
-    "crdp": "./index.js"
+    "crdp": "./index.js",
+    "crdp-visualize": "./visualize.js"
   },
   "scripts": {},
   "repository": {

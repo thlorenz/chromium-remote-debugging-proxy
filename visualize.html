@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Visualized remote debug messages</title>
+  <script type="text/javascript" src="{{ROOT}}/json-human/crel.js"></script>
+  <script type="text/javascript" src="{{ROOT}}/json-human/json.human.js"></script>
+  <link rel="stylesheet" href="{{ROOT}}/json-human/json.human.css" type="text/css" media="screen" charset="utf-8">
+  <script type="text/javascript" charset="utf-8">
+    window.jsonMessages = {{JSONMESSAGES}}
+  </script>
+</head>
+<body>
+</body>
+  <script type="text/javascript" charset="utf-8">
+    var node = JsonHuman.format(window.jsonMessages);
+    document.body.appendChild(node);
+  </script>
+</html>
