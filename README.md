@@ -70,6 +70,8 @@ crdp-visualize ./path-to-file.json
 open ./path-to-file.json.html
 ```
 
+[sample html](http://thlorenz.github.io/chromium-remote-debugging-proxy/)
+
 ## License
 
 MIT
